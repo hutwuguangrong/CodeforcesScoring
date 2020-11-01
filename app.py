@@ -129,4 +129,4 @@ def get_rating(url):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=12345, host="127.0.0.1")
+    app.run(debug=True, port=12345, host="0.0.0.0")
