@@ -1,8 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+import time
+
+from flask import Flask, render_template, redirect, url_for, flash, request, make_response
 from flask.views import MethodView
 from flask_bootstrap import Bootstrap
 from sqlalchemy.orm import sessionmaker
 from flask_cors import *
+from werkzeug.utils import escape
 
 from models import engine, User
 
@@ -10,7 +13,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 app.config["SECRET_KEY"] = "123456"
-app.config["ROOT"] = "hutacm601"
+app.config["token"] = "hutacm601"
 bootstrap = Bootstrap(app)
 
 
@@ -74,6 +77,10 @@ class AddUser(MethodView):
 # 删除用户
 class DeleteUser(MethodView):
     def post(self, id):
+        token = request.cookies.get("token")
+        if token != app.config["token"]:
+            flash("不是管理员不能删除！")
+            return redirect(url_for("show_all_user"))
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         user = session.query(User).filter(User.id == id).first()
@@ -90,6 +97,7 @@ class DeleteUser(MethodView):
             return redirect(url_for("show_all_user"))
         flash("删除成功！")
         session.close()
+        time.sleep(1)
         return redirect(url_for("show_all_user"))
 
 
@@ -113,10 +121,31 @@ class UpdateUser(MethodView):
         return redirect(url_for("show_all_user"))
 
 
+class Login(MethodView):
+    def get(self):
+        return render_template("auth.html")
+
+    def post(self):
+        token = request.values.get("token")
+        location = url_for("show_all_user")
+        response = make_response(
+            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n'
+            "<title>Redirecting...</title>\n"
+            "<h1>Redirecting...</h1>\n"
+            "<p>You should be redirected automatically to target URL: "
+            '<a href="%s">%s</a>.  If not click the link.'
+            % (escape(location),
+               escape(location)), 302)
+        response.set_cookie("token", token)
+        response.headers["Location"] = location
+        return response
+
+
 app.add_url_rule("/add_user/", view_func=AddUser.as_view("add_user"))
 app.add_url_rule("/update_user/", view_func=UpdateUser.as_view("update_user"))
 app.add_url_rule("/show_all_user/", view_func=ShowAllUser.as_view("show_all_user"))
 app.add_url_rule("/delete_user/<id>/", view_func=DeleteUser.as_view("delete_user"))
+app.add_url_rule("/login/", view_func=Login.as_view("login"))
 
 
 def get_rating(url):
@@ -131,7 +160,7 @@ def get_rating(url):
     sel5 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-cyan"  # 蓝
     sel6 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-blue"  # 绿
     sel7 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-gray"  # 银
-    sel8 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-green" # 绿
+    sel8 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-green"  # 绿
     sels = [sel1, sel2, sel3, sel4, sel5, sel6, sel7, sel8]
     for sel in sels:
         results = r.html.find(sel)

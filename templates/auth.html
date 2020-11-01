@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block page_content %}
+<form>
+    <div class="form-group">
+        <label for="username">管理员密码</label>
+        <input type="text" class="form-control" id="username" name="token">
+    </div>
+    <button type="submit" class="btn btn-primary" formmethod="post" formaction="{{ url_for('login')}}">登录</button>
+</form>
+{% endblock %}
