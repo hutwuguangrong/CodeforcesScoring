@@ -10,6 +10,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 app.config["SECRET_KEY"] = "123456"
+app.config["ROOT"] = "hutacm601"
 bootstrap = Bootstrap(app)
 
 
@@ -130,7 +131,8 @@ def get_rating(url):
     sel5 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-cyan"  # 蓝
     sel6 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-blue"  # 绿
     sel7 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-gray"  # 银
-    sels = [sel1, sel2, sel3, sel4, sel5, sel6, sel7]
+    sel8 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-green" # 绿
+    sels = [sel1, sel2, sel3, sel4, sel5, sel6, sel7, sel8]
     for sel in sels:
         results = r.html.find(sel)
         if len(results) != 0:
