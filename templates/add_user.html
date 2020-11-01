@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block page_content %}
+<form>
+    <div class="form-group">
+        <label for="username">姓名</label>
+        <!--        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">-->
+        <input type="text" class="form-control" id="username" name="user_name">
+        <small class="form-text text-muted">请填写你的真实姓名</small>
+    </div>
+    <div class="form-group">
+        <label for="class-pro">专业和班级</label>
+        <input type="text" class="form-control" id="class-pro" name="class_pro">
+        <small class="form-text text-muted">比如 计科-1701</small>
+    </div>
+    <div class="form-group">
+        <label for="cf" >cf 名字</label>
+        <input type="text" class="form-control" id="cf" name="cf_name">
+        <small class="form-text text-muted">比如 tourist</small>
+    </div>
+    <button type="submit" class="btn btn-primary" formmethod="post" formaction="{{ url_for('add_user')}}">添加</button>
+</form>
+{% endblock %}
