@@ -128,8 +128,8 @@ def get_rating(url):
     sel3 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-orange"  # 橙
     sel4 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-violet"  # 紫
     sel5 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-cyan"  # 蓝
-    sel6 = "# pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-blue"  # 绿
-    sel7 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-gray"  # 白
+    sel6 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-blue"  # 绿
+    sel7 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-gray"  # 银
     sels = [sel1, sel2, sel3, sel4, sel5, sel6, sel7]
     for sel in sels:
         results = r.html.find(sel)
