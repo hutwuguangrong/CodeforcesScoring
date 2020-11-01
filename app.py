@@ -23,6 +23,7 @@ class ShowAllUser(MethodView):
         except Exception as e:
             return "服务器蹦了！"
         session.close()
+        users.sort(key=lambda x: x.cf_rating, reverse=True)
         return render_template("all_user.html", users=[_.to_json() for _ in users])
 
 
@@ -121,8 +122,19 @@ def get_rating(url):
     from requests_html import HTMLSession
     session = HTMLSession()
     r = session.get(url)
-    sel = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-legendary"
-    results = r.html.find(sel)
+
+    sel1 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-legendary"  # 黑红
+    sel2 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-red"  # 红
+    sel3 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-orange"  # 橙
+    sel4 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-violet"  # 紫
+    sel5 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-cyan"  # 蓝
+    sel6 = "# pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-blue"  # 绿
+    sel7 = "#pageContent > div:nth-child(3) > div.userbox > div.info > ul > li:nth-child(1) > span.user-gray"  # 白
+    sels = [sel1, sel2, sel3, sel4, sel5, sel6, sel7]
+    for sel in sels:
+        results = r.html.find(sel)
+        if len(results) != 0:
+            break
     if len(results) == 0:
         return -1
     return results[0].text
